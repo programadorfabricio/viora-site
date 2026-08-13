@@ -70,8 +70,8 @@ export const hero = {
  * (ex.: vinda da calculadora de orçamento).
  */
 export const whatsapp = {
-  number: "5519999999999", // TODO: trocar pelo número real da Viora
-  defaultMessage: "Oi! Vim pelo site e queria um orçamento de higienização.",
+  number: "5519991052493", // TODO: trocar pelo número real da Viora
+ defaultMessage: "Oi! Vim pelo site e queria um orçamento de higienização. Vou mandar uma foto do estofado aqui.",
 };
 
 export function buildWhatsAppLink(message?: string): string {
