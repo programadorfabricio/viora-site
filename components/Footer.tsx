@@ -11,7 +11,7 @@ export default function Footer() {
           href={site.instagram}
           target="_blank"
           rel="noopener noreferrer"
-          className="font-semibold text-aqua"
+          className="font-semibold text-white transition hover:text-[#C9BCF5]"
         >
           {site.instagramHandle}
         </a>

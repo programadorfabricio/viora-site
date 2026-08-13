@@ -6,6 +6,27 @@
  * tocado para atualizar conteúdo.
  */
 
+/**
+ * Regras visuais da Viora
+ *
+ * A logo é exceção ao sistema de cores. O turquesa na ponta da
+ * espiral é elemento de marca, não indicação de ação. Nenhuma
+ * auditoria de cor deve alterá-la.
+ *
+ * Turquesa (--aqua):
+ * - reservado para ações primárias e elementos interativos de destaque
+ *
+ * Amarelo (--yellow):
+ * - destaca palavras, informações ou seções inteiras
+ * - nunca representa ação por si só
+ *
+ * Roxo (--violet / --ink):
+ * - cor estrutural e institucional da marca
+ *
+ * Branco:
+ * - conteúdo, contraste e áreas de respiro
+ */
+
 export const site = {
   name: "Viora Higienização",
   shortName: "Viora",
@@ -24,6 +45,22 @@ export const site = {
     region: "SP",
     country: "BR",
   },
+} as const;
+
+/**
+ * HERO
+ * subtitle aparece logo abaixo da headline, no topo da página
+ * (components/Hero.tsx).
+ *
+ * ATENÇÃO — LIMITE DE 2 LINHAS NO MOBILE: no celular, esse texto é cortado
+ * em no máximo 2 linhas (CSS line-clamp, sem "...", sem aviso visual — o
+ * texto excedente some silenciosamente). Ao editar, mantenha o texto curto
+ * o bastante para caber em 2 linhas em uma tela de ~390px de largura
+ * (aproximadamente 80 caracteres, dependendo da palavra). No desktop o
+ * limite não existe e o texto aparece por inteiro.
+ */
+export const hero = {
+  subtitle: "Extração de água tira ácaro, mancha, pelo de pet e cheiro — seca no mesmo dia.",
 } as const;
 
 /**

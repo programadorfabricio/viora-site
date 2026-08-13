@@ -34,6 +34,22 @@ export const metadata: Metadata = {
     siteName: site.name,
     title: `${site.name} — Limpeza de sofá e estofados`,
     description: site.description,
+    images: [
+      {
+        url: "/viora-perfil-1000.png",
+        width: 1000,
+        height: 1000,
+        alt: site.name,
+      },
+    ],
+  },
+  icons: {
+    icon: [
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
+      { url: "/viora-favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
   robots: {
     index: true,

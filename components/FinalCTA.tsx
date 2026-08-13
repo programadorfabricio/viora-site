@@ -12,7 +12,7 @@ export default function FinalCTA() {
           href={buildWhatsAppLink()}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-7 inline-flex items-center gap-2 rounded-full bg-ink px-7 py-4 text-[16px] font-bold text-white shadow-[0_8px_22px_-10px_rgba(27,11,59,0.8)] transition hover:bg-[#33176B]"
+          className="mt-7 inline-flex items-center gap-2 rounded-full bg-aqua px-7 py-4 text-[16px] font-bold text-[#04302A] shadow-[0_8px_22px_-8px_rgba(15,217,184,0.75)] transition hover:-translate-y-0.5 hover:bg-[#2AEFCE]"
         >
           Falar no WhatsApp
         </a>

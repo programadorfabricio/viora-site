@@ -2,7 +2,7 @@ import { howItWorks } from "@/config/site";
 
 export default function HowItWorks() {
   return (
-    <section className="bg-[linear-gradient(150deg,#0FD9B8,#06B49B)] py-16 text-[#04302A] md:py-20">
+    <section className="bg-[linear-gradient(150deg,#3B0F86,#6D28D9)] py-16 text-white md:py-20">
       <div className="mx-auto max-w-6xl px-5">
         <p className="text-xs font-bold uppercase tracking-[0.18em] opacity-70">Como funciona</p>
         <h2 className="mt-3 text-[clamp(30px,5vw,46px)]">Da mensagem ao sofá seco.</h2>

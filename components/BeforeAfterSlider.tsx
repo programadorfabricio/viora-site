@@ -1,8 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { beforeAfterCases } from "@/config/site";
+
+/**
+ * O slider é o primeiro elemento visual da página (LCP). Quando as fotos
+ * reais entrarem em beforeAfterCases (config/site.ts), a imagem "antes" já
+ * carrega com priority — ajuste "sizes" abaixo se a largura máxima do
+ * container mudar.
+ */
+const IMAGE_SIZES = "(min-width: 1024px) 1000px, 100vw";
+
+// Duração máxima da animação de demonstração (ensina a arrastar) — trava em 1,5s.
+const DEMO_DURATION_MS = 1500;
+const DEMO_AMPLITUDE = 16;
 
 /**
  * Placeholders em CSS/Tailwind que sugerem "tecido sujo" vs "tecido limpo".
@@ -52,6 +64,9 @@ export default function BeforeAfterSlider() {
   const [position, setPosition] = useState(50);
   const containerRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
+  const interactedRef = useRef(false);
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const [showTabsFade, setShowTabsFade] = useState(false);
 
   const active = cases[activeIndex];
 
@@ -63,12 +78,74 @@ export default function BeforeAfterSlider() {
     setPosition(Math.max(0, Math.min(100, pct)));
   }, []);
 
+  // Mostra o fade na borda direita das abas só enquanto houver conteúdo
+  // fora da área visível — some assim que o usuário rola até o fim.
+  const updateTabsFade = useCallback(() => {
+    const el = tabsRef.current;
+    if (!el) return;
+    const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
+    setShowTabsFade(el.scrollWidth > el.clientWidth + 2 && !atEnd);
+  }, []);
+
+  useEffect(() => {
+    updateTabsFade();
+    window.addEventListener("resize", updateTabsFade);
+    return () => window.removeEventListener("resize", updateTabsFade);
+  }, [updateTabsFade]);
+
+  // Movimento automático curto que ensina a arrastar: balança a partir do
+  // centro e trava de volta em 50% — nunca dura mais que DEMO_DURATION_MS.
+  // Some totalmente com prefers-reduced-motion, e qualquer interação do
+  // usuário (arrastar ou teclado) cancela na hora.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const start = performance.now();
+    let frameId: number;
+
+    const tick = (now: number) => {
+      if (interactedRef.current) return;
+      const elapsed = now - start;
+      if (elapsed >= DEMO_DURATION_MS) {
+        setPosition(50);
+        return;
+      }
+      const t = elapsed / DEMO_DURATION_MS;
+      const swing = Math.sin(t * Math.PI * 2) * DEMO_AMPLITUDE * (1 - t);
+      setPosition(50 + swing);
+      frameId = requestAnimationFrame(tick);
+    };
+
+    frameId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frameId);
+  }, []);
+
   if (cases.length === 0) return null;
 
   return (
     <div>
       {cases.length > 1 && (
-        <div role="tablist" aria-label="Casos de antes e depois" className="mb-3 flex flex-wrap gap-2">
+        <div
+          ref={tabsRef}
+          role="tablist"
+          aria-label="Casos de antes e depois"
+          onScroll={updateTabsFade}
+          className="mb-1.5 flex flex-nowrap gap-2 overflow-x-auto pb-1"
+          // Funde as abas para transparente perto da borda direita enquanto
+          // houver conteúdo fora da área visível — some sozinho ao rolar até
+          // o fim. mask-image funde os próprios botões (não pinta uma cor
+          // sólida por cima), então funciona sobre qualquer fundo, inclusive
+          // o degradê roxo do Hero.
+          style={
+            showTabsFade
+              ? {
+                  WebkitMaskImage: "linear-gradient(to right, black calc(100% - 32px), transparent 100%)",
+                  maskImage: "linear-gradient(to right, black calc(100% - 32px), transparent 100%)",
+                }
+              : undefined
+          }
+        >
           {cases.map((c, i) => (
             <button
               key={c.id}
@@ -76,10 +153,11 @@ export default function BeforeAfterSlider() {
               type="button"
               aria-selected={i === activeIndex}
               onClick={() => {
+                interactedRef.current = true;
                 setActiveIndex(i);
                 setPosition(50);
               }}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+              className={`shrink-0 whitespace-nowrap rounded-full px-3.5 py-1 text-[13px] font-semibold transition md:px-4 md:py-2 md:text-sm ${
                 i === activeIndex
                   ? "bg-white text-violet-deep"
                   : "bg-white/10 text-white hover:bg-white/20"
@@ -102,6 +180,7 @@ export default function BeforeAfterSlider() {
         aria-valuetext={`${Math.round(position)}%`}
         className="relative aspect-[16/10] w-full cursor-ew-resize touch-none select-none overflow-hidden rounded-[22px] border-[3px] border-white/55 bg-black shadow-[0_30px_70px_-30px_rgba(0,0,0,0.7)]"
         onPointerDown={(e) => {
+          interactedRef.current = true;
           draggingRef.current = true;
           (e.target as HTMLElement).setPointerCapture(e.pointerId);
           setPositionFromClientX(e.clientX);
@@ -116,6 +195,7 @@ export default function BeforeAfterSlider() {
           draggingRef.current = false;
         }}
         onKeyDown={(e) => {
+          interactedRef.current = true;
           if (e.key === "ArrowLeft") {
             setPosition((p) => Math.max(0, p - STEP));
             e.preventDefault();
@@ -135,14 +215,27 @@ export default function BeforeAfterSlider() {
         }}
       >
         {active.beforeImage ? (
-          <Image src={active.beforeImage} alt={`${active.label} antes da higienização`} fill className="object-cover" />
+          <Image
+            src={active.beforeImage}
+            alt={`${active.label} antes da higienização`}
+            fill
+            priority
+            sizes={IMAGE_SIZES}
+            className="object-cover"
+          />
         ) : (
           <DirtyPlaceholder />
         )}
 
         <div className="absolute inset-0" style={{ clipPath: `inset(0 0 0 ${position}%)` }}>
           {active.afterImage ? (
-            <Image src={active.afterImage} alt={`${active.label} depois da higienização`} fill className="object-cover" />
+            <Image
+              src={active.afterImage}
+              alt={`${active.label} depois da higienização`}
+              fill
+              sizes={IMAGE_SIZES}
+              className="object-cover"
+            />
           ) : (
             <CleanPlaceholder />
           )}
@@ -151,7 +244,7 @@ export default function BeforeAfterSlider() {
         <span className="absolute bottom-4 left-4 rounded-full bg-black/70 px-3.5 py-2 text-[11px] font-extrabold uppercase tracking-[0.16em] text-white">
           Antes
         </span>
-        <span className="absolute bottom-4 right-4 rounded-full bg-aqua px-3.5 py-2 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#04302A]">
+        <span className="absolute bottom-4 right-4 rounded-full bg-white px-3.5 py-2 text-[11px] font-extrabold uppercase tracking-[0.16em] text-ink">
           Depois
         </span>
 
@@ -161,7 +254,18 @@ export default function BeforeAfterSlider() {
           </div>
         </div>
       </div>
-      <p className="mt-3 text-center text-[13.5px] font-medium text-[#C9BCF5]">Arraste para comparar</p>
+      {/* Única affordance de "isso arrasta" no toque: a animação de demonstração
+          não roda com prefers-reduced-motion, já terminou para quem chega
+          depois de 1,5s, e não há cursor no touch para sugerir interação. */}
+      <p className="mt-1 text-center text-[11px] font-medium text-[#C9BCF5] md:mt-3 md:text-[13.5px]">
+        <span className="sr-only">Arraste para comparar</span>
+        <span aria-hidden="true" className="md:hidden">
+          ← arraste →
+        </span>
+        <span aria-hidden="true" className="hidden md:inline">
+          Arraste para comparar
+        </span>
+      </p>
     </div>
   );
 }

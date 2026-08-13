@@ -27,6 +27,32 @@ Quase tudo que muda com frequência está em **um único arquivo**:
 [`config/site.ts`](config/site.ts). Os componentes leem daqui — não é
 necessário mexer em nenhum componente para atualizar conteúdo.
 
+### Regras visuais (cores)
+
+```
+A logo é exceção ao sistema de cores. O turquesa na ponta da
+espiral é elemento de marca, não indicação de ação. Nenhuma
+auditoria de cor deve alterá-la.
+
+Turquesa (--aqua):
+- reservado para ações primárias e elementos interativos de destaque
+
+Amarelo (--yellow):
+- destaca palavras, informações ou seções inteiras
+- nunca representa ação por si só
+
+Roxo (--violet / --ink):
+- cor estrutural e institucional da marca
+
+Branco:
+- conteúdo, contraste e áreas de respiro
+```
+
+Ao adicionar ou editar um componente, mantenha essa regra: turquesa some
+sempre que um elemento novo for decorativo em vez de uma ação clicável, e
+nunca deixe amarelo virar cor de botão. O mesmo bloco está comentado no
+topo de [`config/site.ts`](config/site.ts).
+
 ### Número de WhatsApp e mensagem padrão
 
 ```ts

@@ -202,7 +202,7 @@ export default function Calculator() {
               type="button"
               disabled={!canProceedStep1}
               onClick={goNextFromStep1}
-              className="mt-7 w-full rounded-full bg-violet px-6 py-3.5 text-[15.5px] font-bold text-white transition enabled:hover:bg-violet-deep disabled:cursor-not-allowed disabled:opacity-40"
+              className="mt-7 w-full rounded-full bg-aqua px-6 py-3.5 text-[15.5px] font-bold text-[#04302A] transition enabled:hover:-translate-y-0.5 enabled:hover:bg-[#2AEFCE] disabled:cursor-not-allowed disabled:opacity-40"
             >
               Continuar
             </button>
@@ -251,7 +251,7 @@ export default function Calculator() {
               <button
                 type="button"
                 onClick={() => setStep(3)}
-                className="flex-1 rounded-full bg-violet px-6 py-3.5 text-[15.5px] font-bold text-white transition hover:bg-violet-deep"
+                className="flex-1 rounded-full bg-aqua px-6 py-3.5 text-[15.5px] font-bold text-[#04302A] transition hover:-translate-y-0.5 hover:bg-[#2AEFCE]"
               >
                 Continuar
               </button>
@@ -300,7 +300,7 @@ export default function Calculator() {
                 type="button"
                 disabled={!city}
                 onClick={() => setStep(4)}
-                className="flex-1 rounded-full bg-violet px-6 py-3.5 text-[15.5px] font-bold text-white transition enabled:hover:bg-violet-deep disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex-1 rounded-full bg-aqua px-6 py-3.5 text-[15.5px] font-bold text-[#04302A] transition enabled:hover:-translate-y-0.5 enabled:hover:bg-[#2AEFCE] disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Ver estimativa
               </button>
