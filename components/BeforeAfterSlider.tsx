@@ -16,6 +16,11 @@ const IMAGE_SIZES = "(min-width: 1024px) 1000px, 100vw";
 const DEMO_DURATION_MS = 1500;
 const DEMO_AMPLITUDE = 16;
 
+// Distância (px) que o toque precisa se mover na horizontal, e superar a
+// vertical, antes de o gesto ser tratado como arraste do slider em vez de
+// rolagem da página. Ver comentário em onPointerDown/onPointerMove.
+const DRAG_INTENT_THRESHOLD = 8;
+
 /**
  * Placeholders em CSS/Tailwind que sugerem "tecido sujo" vs "tecido limpo".
  * TROCAR PELAS FOTOS REAIS: preencha beforeImage/afterImage em
@@ -65,6 +70,9 @@ export default function BeforeAfterSlider() {
   const containerRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
   const interactedRef = useRef(false);
+  // Toque/caneta pendente: ponto onde o gesto começou, aguardando decidir se
+  // é um arraste horizontal (nosso) ou uma rolagem vertical (do navegador).
+  const pendingTouchRef = useRef<{ id: number; x: number; y: number } | null>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
   const [showTabsFade, setShowTabsFade] = useState(false);
 
@@ -178,21 +186,54 @@ export default function BeforeAfterSlider() {
         aria-valuemax={100}
         aria-valuenow={Math.round(position)}
         aria-valuetext={`${Math.round(position)}%`}
-        className="relative aspect-[16/10] w-full cursor-ew-resize touch-none select-none overflow-hidden rounded-[22px] border-[3px] border-white/55 bg-black shadow-[0_30px_70px_-30px_rgba(0,0,0,0.7)]"
+        className="relative aspect-[16/10] w-full cursor-ew-resize touch-pan-y select-none overflow-hidden rounded-[22px] border-[3px] border-white/55 bg-black shadow-[0_30px_70px_-30px_rgba(0,0,0,0.7)]"
         onPointerDown={(e) => {
           interactedRef.current = true;
-          draggingRef.current = true;
-          (e.target as HTMLElement).setPointerCapture(e.pointerId);
-          setPositionFromClientX(e.clientX);
+          // Mouse (e trackpad) começa a arrastar na hora, sem ambiguidade
+          // de gesto — não há "rolagem vertical" concorrendo com o clique.
+          if (e.pointerType === "mouse") {
+            draggingRef.current = true;
+            (e.target as HTMLElement).setPointerCapture(e.pointerId);
+            setPositionFromClientX(e.clientX);
+            return;
+          }
+          // Toque/caneta: NÃO captura ainda. Só guarda o ponto inicial —
+          // capturar aqui prenderia todo o gesto (inclusive rolagem
+          // vertical) neste elemento, travando a página. A decisão entre
+          // "é arraste" e "é rolagem" acontece em onPointerMove.
+          pendingTouchRef.current = { id: e.pointerId, x: e.clientX, y: e.clientY };
         }}
         onPointerMove={(e) => {
-          if (draggingRef.current) setPositionFromClientX(e.clientX);
+          if (draggingRef.current) {
+            setPositionFromClientX(e.clientX);
+            return;
+          }
+          const pending = pendingTouchRef.current;
+          if (!pending || pending.id !== e.pointerId) return;
+          const deltaX = e.clientX - pending.x;
+          const deltaY = e.clientY - pending.y;
+          if (Math.abs(deltaX) > DRAG_INTENT_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
+            // Horizontal venceu: assume o gesto como arraste do slider.
+            draggingRef.current = true;
+            pendingTouchRef.current = null;
+            (e.target as HTMLElement).setPointerCapture(e.pointerId);
+            setPositionFromClientX(e.clientX);
+          } else if (Math.abs(deltaY) > DRAG_INTENT_THRESHOLD) {
+            // Vertical venceu: é rolagem da página — solta o gesto e deixa
+            // o navegador tratar (touch-action: pan-y já permite isso).
+            pendingTouchRef.current = null;
+          }
         }}
         onPointerUp={() => {
           draggingRef.current = false;
+          pendingTouchRef.current = null;
         }}
         onPointerCancel={() => {
+          // O navegador dispara isto quando decide assumir o gesto como
+          // rolagem — resetar aqui evita que o slider fique "preso" achando
+          // que ainda está arrastando.
           draggingRef.current = false;
+          pendingTouchRef.current = null;
         }}
         onKeyDown={(e) => {
           interactedRef.current = true;
