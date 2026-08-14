@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { services } from "@/config/site";
 
 export default function Services() {
@@ -10,21 +11,22 @@ export default function Services() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {services.map((service) => (
-          <div
+          <Link
             key={service.id}
-            className="flex flex-col rounded-[20px] bg-white p-6 shadow-[0_24px_60px_-34px_rgba(60,20,140,0.5)]"
+            href={`/servicos/${service.pageSlug}`}
+            className="flex flex-col rounded-[20px] bg-white p-6 shadow-[0_24px_60px_-34px_rgba(60,20,140,0.5)] transition hover:-translate-y-0.5"
           >
             <h3 className="text-lg font-bold text-ink">{service.name}</h3>
             <p className="mt-2 flex-1 text-[15px] text-[#5C5478]">{service.description}</p>
             <p className="mt-4 border-t border-lilac pt-4">
-              <span className="mr-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8B80A8]">
+              <span className="mr-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#6B6088]">
                 {service.priceNote}
               </span>
               <span className="font-display text-xl font-extrabold text-violet">
                 R$ {service.priceFrom}
               </span>
             </p>
-          </div>
+          </Link>
         ))}
       </div>
     </section>

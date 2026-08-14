@@ -1,4 +1,3 @@
-import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import DirtFacts from "@/components/DirtFacts";
 import HowItWorks from "@/components/HowItWorks";
@@ -10,8 +9,6 @@ import Reviews from "@/components/Reviews";
 import Gallery from "@/components/Gallery";
 import FAQ from "@/components/FAQ";
 import FinalCTA from "@/components/FinalCTA";
-import Footer from "@/components/Footer";
-import StickyWhatsApp from "@/components/StickyWhatsApp";
 import { faq } from "@/config/site";
 
 export default function Home() {
@@ -34,7 +31,6 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <Header />
       <main>
         <Hero />
         <DirtFacts />
@@ -48,8 +44,6 @@ export default function Home() {
         <FAQ />
         <FinalCTA />
       </main>
-      <Footer />
-      <StickyWhatsApp />
     </>
   );
 }

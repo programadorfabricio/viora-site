@@ -1,9 +1,14 @@
 # Viora Higienização
 
-Landing page única, focada em conversão para WhatsApp, para a Viora Higienização
-(higienização de estofados em domicílio em Paulínia/SP e região). Next.js 15 (App
-Router) + TypeScript + Tailwind CSS. Site 100% estático — sem CMS, sem banco de
-dados, sem backend.
+Site da Viora Higienização (higienização de estofados em domicílio em
+Paulínia/SP e região), focado em conversão para WhatsApp e em SEO local.
+Next.js 15 (App Router) + TypeScript + Tailwind CSS. Site 100% estático —
+sem CMS, sem banco de dados, sem backend.
+
+11 páginas: a home, 5 páginas de serviço, Preços, Área de atendimento,
+Sobre, e um blog com posts em Markdown. Cada página de serviço é
+propositalmente diferente das outras — conteúdo específico daquele item,
+não um template com a palavra trocada — para não virar doorway page.
 
 ## Rodando localmente
 
@@ -117,6 +122,36 @@ Para ativar:
 Assim que o array tiver itens, a seção aparece sozinha — não precisa editar
 os componentes nem `app/page.tsx`.
 
+### Páginas de serviço (`/servicos/...`)
+
+As 5 páginas de serviço usam **um único template**
+([`app/servicos/[slug]/page.tsx`](app/servicos/%5Bslug%5D/page.tsx)) e um
+arquivo de conteúdo cada, em `content/services/` (`sofa.ts`, `colchao.ts`,
+`poltronas-cadeiras.ts`, `tapetes.ts`, `automotiva.ts`). Para editar o texto
+de uma página de serviço, edite o arquivo correspondente — título, textos,
+FAQ e mensagem do WhatsApp estão todos ali. Preço **não** fica nesses
+arquivos: a página busca em `calculatorItems` (`config/site.ts`) pelos
+`serviceIds` declarados, para nunca ter o mesmo número em dois lugares.
+
+Textos que contêm link interno usam a sintaxe `[texto](/rota)` (ver
+[`components/RichText.tsx`](components/RichText.tsx)) — é assim que os
+links ficam em texto corrido, sem virar bloco de "veja também".
+
+### Páginas institucionais (`/precos`, `/area-de-atendimento`, `/sobre`)
+
+Cada uma tem seu próprio `page.tsx` em `app/`, e o texto vem de
+`content/pages/{precos,area-de-atendimento,sobre}.ts`. Preços e cidades
+continuam vindo de `config/site.ts`, não desses arquivos.
+
+### Blog
+
+Os posts ficam em `content/blog/*.md` — Markdown puro com frontmatter
+(`title`, `slug`, `description`, `date`) no topo do arquivo. Para adicionar
+um post novo, crie um `.md` nessa pasta; ele aparece sozinho em `/blog` e
+ganha uma URL `/blog/[slug]` automaticamente — não precisa editar nenhum
+componente ou a lista de rotas. O parsing é feito por
+[`lib/blog.ts`](lib/blog.ts) (`gray-matter` + `marked`).
+
 ## Domínio e deploy
 
 Projeto pronto para deploy na Vercel, apontando o domínio
@@ -128,12 +163,16 @@ Projeto pronto para deploy na Vercel, apontando o domínio
 ## Estrutura
 
 ```
-app/            rotas do App Router (layout, página única, sitemap, robots)
-components/     seções da landing page
-config/site.ts  todo o conteúdo editável (preços, textos, cidades, WhatsApp)
-public/         imagens estáticas (antes/depois, galeria)
+app/                    rotas do App Router — layout raiz (Header/Footer),
+                         home, /servicos/[slug], /precos, /area-de-atendimento,
+                         /sobre, /blog, /blog/[slug], sitemap, robots
+components/              seções e componentes de UI reutilizáveis
+content/services/        conteúdo das 5 páginas de serviço (um arquivo cada)
+content/pages/           conteúdo de /precos, /area-de-atendimento, /sobre
+content/blog/            posts do blog em Markdown (frontmatter + prosa)
+lib/blog.ts              leitura e parsing dos posts (gray-matter + marked)
+config/site.ts           conteúdo global editável (preços, cidades, WhatsApp,
+                         regras de cor) — services e cities são a fonte
+                         única de verdade, lida por várias páginas
+public/                  imagens estáticas (antes/depois, galeria, ícones)
 ```
-
-O arquivo `_reference-static-draft/index.html` é um rascunho estático
-anterior, mantido só como referência de conteúdo/paleta — não faz parte do
-site em produção e pode ser apagado quando não for mais necessário.

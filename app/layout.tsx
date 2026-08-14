@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, Public_Sans } from "next/font/google";
 import "./globals.css";
 import { site, cities, services } from "@/config/site";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import StickyWhatsApp from "@/components/StickyWhatsApp";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -19,10 +22,11 @@ const publicSans = Public_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: {
-    default: `${site.name} — Limpeza de sofá, colchão e estofados em Paulínia`,
-    template: `%s — ${site.name}`,
-  },
+  // String simples (não objeto com template) de propósito: cada página
+  // define seu próprio title completo e único via metadata/generateMetadata
+  // — nada de sufixo repetido igual em todas as páginas. Esta é só a
+  // usada pela home, que não define a sua própria.
+  title: `${site.name} — Limpeza de sofá, colchão e estofados em Paulínia`,
   description: site.description,
   alternates: {
     canonical: "/",
@@ -99,7 +103,10 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(businessJsonLd) }}
         />
+        <Header />
         {children}
+        <Footer />
+        <StickyWhatsApp />
       </body>
     </html>
   );

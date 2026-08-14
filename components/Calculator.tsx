@@ -155,7 +155,7 @@ export default function Calculator() {
 
       <div className="rounded-[24px] bg-white p-6 shadow-[0_24px_70px_-30px_rgba(60,20,140,0.55)] md:p-8">
         {step !== 4 && (
-          <p className="mb-6 text-xs font-bold uppercase tracking-[0.14em] text-[#8B80A8]">
+          <p className="mb-6 text-xs font-bold uppercase tracking-[0.14em] text-[#6B6088]">
             Passo {displaySteps} de {totalSteps}
           </p>
         )}
@@ -312,7 +312,7 @@ export default function Calculator() {
           <div>
             {cityIsCovered ? (
               <>
-                <p className="text-sm font-semibold uppercase tracking-[0.1em] text-[#8B80A8]">Sua estimativa</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.1em] text-[#6B6088]">Sua estimativa</p>
                 <p className="mt-2 font-display text-[clamp(30px,6vw,44px)] font-extrabold text-violet">
                   de {currency(totals.min)} a {currency(totals.max)}
                 </p>
@@ -322,7 +322,7 @@ export default function Calculator() {
               </>
             ) : (
               <>
-                <p className="text-sm font-semibold uppercase tracking-[0.1em] text-[#8B80A8]">Sua cidade</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.1em] text-[#6B6088]">Sua cidade</p>
                 <p className="mt-2 font-display text-2xl font-extrabold text-violet">Consulte pelo WhatsApp</p>
                 <p className="mt-3 text-sm text-[#5C5478]">
                   Essa cidade ainda não está na nossa lista padrão. Manda a mensagem que a gente confirma se dá
@@ -342,7 +342,7 @@ export default function Calculator() {
             <button
               type="button"
               onClick={resetCalculator}
-              className="mt-3 w-full rounded-full px-6 py-2.5 text-sm font-semibold text-[#8B80A8] transition hover:text-violet"
+              className="mt-3 w-full rounded-full px-6 py-2.5 text-sm font-semibold text-[#6B6088] transition hover:text-violet"
             >
               Recomeçar
             </button>

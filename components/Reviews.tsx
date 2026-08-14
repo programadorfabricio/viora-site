@@ -31,7 +31,7 @@ export default function Reviews() {
             </p>
             <p className="mt-3 text-[15px] text-[#5C5478]">&ldquo;{review.text}&rdquo;</p>
             <p className="mt-4 text-sm font-bold text-ink">
-              {review.name} <span className="font-normal text-[#8B80A8]">· {review.city}</span>
+              {review.name} <span className="font-normal text-[#6B6088]">· {review.city}</span>
             </p>
           </div>
         ))}

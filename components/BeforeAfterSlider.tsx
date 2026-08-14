@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { beforeAfterCases } from "@/config/site";
+import { beforeAfterCases, type BeforeAfterCase } from "@/config/site";
 
 /**
  * O slider é o primeiro elemento visual da página (LCP). Quando as fotos
@@ -63,8 +63,7 @@ function CleanPlaceholder() {
 
 const STEP = 4;
 
-export default function BeforeAfterSlider() {
-  const cases = beforeAfterCases;
+export default function BeforeAfterSlider({ cases = beforeAfterCases }: { cases?: BeforeAfterCase[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [position, setPosition] = useState(50);
   const containerRef = useRef<HTMLDivElement>(null);

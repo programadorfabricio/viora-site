@@ -74,3 +74,57 @@ summary::-webkit-details-marker {
     animation: none;
   }
 }
+
+/* Conteúdo renderizado a partir do Markdown dos posts (content/blog/*.md) */
+.blog-content h2 {
+  margin-top: 2.2em;
+  margin-bottom: 0.6em;
+  font-size: 1.4rem;
+}
+
+.blog-content p {
+  margin-top: 1em;
+  color: #3d3560;
+  line-height: 1.7;
+}
+
+.blog-content ul,
+.blog-content ol {
+  margin-top: 1em;
+  padding-left: 1.3em;
+  color: #3d3560;
+  line-height: 1.7;
+}
+
+.blog-content ul {
+  list-style: disc;
+}
+
+.blog-content ol {
+  list-style: decimal;
+}
+
+.blog-content li {
+  margin-top: 0.4em;
+}
+
+.blog-content li > p {
+  margin-top: 0;
+  display: inline;
+}
+
+.blog-content strong {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.blog-content a {
+  color: var(--color-violet);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.blog-content a:hover {
+  color: var(--color-violet-deep);
+}

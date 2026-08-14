@@ -107,6 +107,7 @@ export const services = [
     description: "Higienização profunda com extração de água, para sofás de 2 lugares até retráteis e de canto.",
     priceFrom: 130,
     priceNote: "a partir de",
+    pageSlug: "higienizacao-de-sofa",
   },
   {
     id: "poltrona",
@@ -114,6 +115,7 @@ export const services = [
     description: "Aspiração, produto específico para o tecido e extração da sujeira.",
     priceFrom: 70,
     priceNote: "a partir de",
+    pageSlug: "higienizacao-de-poltronas-e-cadeiras",
   },
   {
     id: "cadeiras",
@@ -121,6 +123,7 @@ export const services = [
     description: "Cadeiras de jantar ou de escritório, com forro em tecido.",
     priceFrom: 40,
     priceNote: "a partir de, cada",
+    pageSlug: "higienizacao-de-poltronas-e-cadeiras",
   },
   {
     id: "colchao",
@@ -128,6 +131,7 @@ export const services = [
     description: "Remove ácaro, suor e manchas, do solteiro ao casal.",
     priceFrom: 110,
     priceNote: "a partir de",
+    pageSlug: "higienizacao-de-colchao",
   },
   {
     id: "tapete",
@@ -135,6 +139,7 @@ export const services = [
     description: "Higienização por metro quadrado, com secagem controlada.",
     priceFrom: 30,
     priceNote: "a partir de, por m²",
+    pageSlug: "higienizacao-de-tapetes",
   },
   {
     id: "carro",
@@ -142,6 +147,7 @@ export const services = [
     description: "Bancos, forro de teto e carpete do carro, de hatch a SUV.",
     priceFrom: 200,
     priceNote: "a partir de",
+    pageSlug: "higienizacao-automotiva",
   },
 ] as const;
 
