@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import RichText from "@/components/RichText";
+import WhatsAppLink from "@/components/WhatsAppLink";
 import sobre from "@/content/pages/sobre";
 import { site, buildWhatsAppLink } from "@/config/site";
 
@@ -40,14 +41,13 @@ export default function SobrePage() {
 
         <div className="mt-12 rounded-[28px] bg-[linear-gradient(150deg,#FFD34A,#FFB03A)] px-6 py-12 text-center text-ink">
           <h2 className="text-[clamp(24px,4vw,34px)]">Alguma dúvida antes de agendar?</h2>
-          <a
+          <WhatsAppLink
             href={buildWhatsAppLink()}
-            target="_blank"
-            rel="noopener noreferrer"
+            origin="cta_final"
             className="mt-6 inline-flex items-center gap-2 rounded-full bg-aqua px-7 py-4 text-[16px] font-bold text-[#04302A] shadow-[0_8px_22px_-8px_rgba(15,217,184,0.75)] transition hover:-translate-y-0.5 hover:bg-[#2AEFCE]"
           >
             Falar no WhatsApp
-          </a>
+          </WhatsAppLink>
         </div>
       </section>
     </main>

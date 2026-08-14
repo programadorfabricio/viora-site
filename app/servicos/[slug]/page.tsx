@@ -4,6 +4,8 @@ import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import RichText from "@/components/RichText";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
+import FaqAccordion from "@/components/FaqAccordion";
+import WhatsAppLink from "@/components/WhatsAppLink";
 import { servicePages, getServicePage } from "@/content/services";
 import { site, cities, calculatorItems, buildWhatsAppLink } from "@/config/site";
 
@@ -92,14 +94,13 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#C9BCF5]">{service.eyebrow}</p>
           <h1 className="mt-3 max-w-[22ch] text-[clamp(28px,5.5vw,52px)] font-extrabold">{service.h1}</h1>
           <RichText text={service.heroLead} className="mt-3 max-w-[56ch] text-[16px] text-[#DCD2FF] md:text-[18px]" />
-          <a
+          <WhatsAppLink
             href={buildWhatsAppLink(service.whatsappMessage)}
-            target="_blank"
-            rel="noopener noreferrer"
+            origin="hero"
             className="mt-6 inline-flex items-center gap-2 rounded-full bg-aqua px-6 py-3.5 text-[15.5px] font-bold text-[#04302A] shadow-[0_8px_22px_-8px_rgba(15,217,184,0.75)] transition hover:-translate-y-0.5 hover:bg-[#2AEFCE]"
           >
             Pedir orçamento no WhatsApp
-          </a>
+          </WhatsAppLink>
 
           {service.beforeAfter.length > 0 && (
             <div className="mt-8">
@@ -184,34 +185,22 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       {/* FAQ */}
       <section className="mx-auto max-w-3xl px-5 py-14">
         <h2 className="text-[clamp(26px,4.5vw,38px)] text-ink">{service.faqTitle}</h2>
-        <div className="mt-6 space-y-3">
-          {service.faq.map((item) => (
-            <details key={item.question} className="group rounded-2xl bg-white p-5 shadow-[0_12px_30px_-24px_rgba(60,20,140,0.6)]">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-ink">
-                {item.question}
-                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-lilac text-lg font-extrabold leading-none text-violet group-open:bg-violet group-open:text-white">
-                  <span className="group-open:hidden">+</span>
-                  <span className="hidden group-open:inline">–</span>
-                </span>
-              </summary>
-              <p className="mt-3 text-[15.5px] text-[#5C5478]">{item.answer}</p>
-            </details>
-          ))}
+        <div className="mt-6">
+          <FaqAccordion items={service.faq} />
         </div>
       </section>
 
       {/* CTA final */}
-      <section className="px-5 pb-16">
+      <section className="px-5 pb-24 md:pb-32">
         <div className="mx-auto max-w-6xl rounded-[28px] bg-[linear-gradient(150deg,#FFD34A,#FFB03A)] px-6 py-14 text-center text-ink md:px-10">
           <h2 className="text-[clamp(28px,4.5vw,42px)]">Manda a foto pelo WhatsApp e o orçamento sai na hora.</h2>
-          <a
+          <WhatsAppLink
             href={buildWhatsAppLink(service.whatsappMessage)}
-            target="_blank"
-            rel="noopener noreferrer"
+            origin="cta_final"
             className="mt-6 inline-flex items-center gap-2 rounded-full bg-aqua px-7 py-4 text-[16px] font-bold text-[#04302A] shadow-[0_8px_22px_-8px_rgba(15,217,184,0.75)] transition hover:-translate-y-0.5 hover:bg-[#2AEFCE]"
           >
             Falar no WhatsApp
-          </a>
+          </WhatsAppLink>
         </div>
       </section>
     </main>

@@ -36,6 +36,7 @@ export const site = {
   locale: "pt_BR",
   instagram: "https://instagram.com/viorahigienizacao",
   instagramHandle: "@viorahigienizacao",
+  email: "contato@viorahigienizacao.com.br",
 
   // Endereço usado no JSON-LD (LocalBusiness). A empresa atende em domicílio,
   // não tem loja física aberta ao público — mesmo assim o Schema.org pede
@@ -46,6 +47,17 @@ export const site = {
     country: "BR",
   },
 } as const;
+
+/**
+ * GOOGLE ANALYTICS (GA4)
+ * Cole aqui o Measurement ID do GA4 da Viora (formato "G-XXXXXXXXXX",
+ * em Admin > Fluxos de dados > seu fluxo, no próprio Google Analytics).
+ * Enquanto estiver vazio, nenhum script de analytics é carregado — o site
+ * funciona normalmente sem GA4 configurado, só não há coleta de dados.
+ */
+export const analytics = {
+  measurementId: "", // TODO: preencher com o Measurement ID do GA4
+};
 
 /**
  * HERO

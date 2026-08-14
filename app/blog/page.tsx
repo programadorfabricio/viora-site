@@ -46,7 +46,7 @@ export default function BlogIndexPage() {
               href={`/blog/${post.slug}`}
               className="flex flex-col rounded-[20px] bg-white p-6 shadow-[0_24px_60px_-34px_rgba(60,20,140,0.5)] transition hover:-translate-y-0.5"
             >
-              <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[#8B80A8]">
+              <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[#6B6088]">
                 {formatDate(post.date)}
               </span>
               <h2 className="mt-2 text-lg font-bold text-ink">{post.title}</h2>

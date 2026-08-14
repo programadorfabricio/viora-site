@@ -68,6 +68,37 @@ export const whatsapp = {
 };
 ```
 
+### Google Analytics (GA4)
+
+```ts
+// config/site.ts
+export const analytics = {
+  measurementId: "", // TODO: preencher com o Measurement ID do GA4 (G-XXXXXXXXXX)
+};
+```
+
+Enquanto `measurementId` estiver vazio, nenhum script de analytics é
+carregado — o site funciona normalmente, só não há coleta. Preencha com o
+Measurement ID do GA4 (Admin > Fluxos de dados, no próprio Google
+Analytics) para ativar.
+
+O script carrega via [`components/GoogleAnalytics.tsx`](components/GoogleAnalytics.tsx)
+(`next/script`, `strategy="afterInteractive"`). Eventos disparados
+automaticamente:
+
+- `whatsapp_click` — todo clique em botão de WhatsApp do site, com
+  `{ origem }` sendo `header`, `hero`, `calculadora`, `barra_fixa`,
+  `cta_final` ou `rodape`. Centralizado em
+  [`components/WhatsAppLink.tsx`](components/WhatsAppLink.tsx) — qualquer
+  botão de WhatsApp novo deve usar esse componente em vez de um `<a>` cru,
+  para não ficar de fora do tracking.
+- `calculadora_concluida` — ao terminar o passo 3 da calculadora (cidade
+  escolhida, estimativa gerada), com cidade, se é atendida, quantidade de
+  itens e a faixa de valor.
+- `faq_abertura` — ao abrir uma pergunta do FAQ (home e páginas de
+  serviço), com o texto da pergunta. Centralizado em
+  [`components/FaqAccordion.tsx`](components/FaqAccordion.tsx).
+
 ### Preços
 
 Dois lugares, propositalmente:
@@ -152,6 +183,15 @@ ganha uma URL `/blog/[slug]` automaticamente — não precisa editar nenhum
 componente ou a lista de rotas. O parsing é feito por
 [`lib/blog.ts`](lib/blog.ts) (`gray-matter` + `marked`).
 
+### Política de Privacidade
+
+Texto em [`content/pages/politica-de-privacidade.ts`](content/pages/politica-de-privacidade.ts),
+página em `/politica-de-privacidade`. É `noindex` de propósito (não tem
+valor de busca) — por isso não entra em `sitemap.ts`, mas continua acessível
+pelo link no rodapé, presente em todas as páginas. Se os dados coletados,
+a finalidade ou o e-mail de contato mudarem, atualize esse arquivo — não é
+gerado a partir de nenhuma outra fonte.
+
 ## Domínio e deploy
 
 Projeto pronto para deploy na Vercel, apontando o domínio
@@ -163,16 +203,21 @@ Projeto pronto para deploy na Vercel, apontando o domínio
 ## Estrutura
 
 ```
-app/                    rotas do App Router — layout raiz (Header/Footer),
+app/                    rotas do App Router — layout raiz (Header/Footer/GA4),
                          home, /servicos/[slug], /precos, /area-de-atendimento,
-                         /sobre, /blog, /blog/[slug], sitemap, robots
-components/              seções e componentes de UI reutilizáveis
+                         /sobre, /blog, /blog/[slug], /politica-de-privacidade,
+                         sitemap, robots
+components/              seções e componentes de UI reutilizáveis, incluindo
+                         WhatsAppLink.tsx (todo botão de WhatsApp) e
+                         FaqAccordion.tsx (todo FAQ) — ambos já com tracking
 content/services/        conteúdo das 5 páginas de serviço (um arquivo cada)
-content/pages/           conteúdo de /precos, /area-de-atendimento, /sobre
+content/pages/           conteúdo de /precos, /area-de-atendimento, /sobre,
+                         /politica-de-privacidade
 content/blog/            posts do blog em Markdown (frontmatter + prosa)
 lib/blog.ts              leitura e parsing dos posts (gray-matter + marked)
+lib/analytics.ts         helper de tracking (trackEvent) usado pelo GA4
 config/site.ts           conteúdo global editável (preços, cidades, WhatsApp,
-                         regras de cor) — services e cities são a fonte
+                         GA4, regras de cor) — services e cities são a fonte
                          única de verdade, lida por várias páginas
 public/                  imagens estáticas (antes/depois, galeria, ícones)
 ```

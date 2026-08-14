@@ -35,7 +35,10 @@ export type ServicePageContent = {
   beforeAfter: BeforeAfterCase[];
 };
 
-export type ProseSection = { title: string; paragraphs: string[] };
+// `list`, quando presente, renderiza como lista com marcadores logo depois
+// dos parágrafos — usado em conteúdo mais denso (ex.: política de
+// privacidade), onde texto corrido puro fica difícil de escanear.
+export type ProseSection = { title: string; paragraphs: string[]; list?: string[] };
 
 /**
  * Conteúdo das páginas institucionais (/precos, /area-de-atendimento,

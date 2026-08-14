@@ -8,6 +8,8 @@ import {
   type CalculatorItem,
   type City,
 } from "@/config/site";
+import { trackEvent } from "@/lib/analytics";
+import WhatsAppLink from "./WhatsAppLink";
 
 type Selection = {
   quantity: number;
@@ -131,6 +133,17 @@ export default function Calculator() {
 
     return parts.join("\n");
   }, [selectedItems, selections, city, cityIsCovered, totals]);
+
+  function finishStep3() {
+    trackEvent("calculadora_concluida", {
+      cidade: city,
+      cidade_atendida: cityIsCovered,
+      itens: selectedItems.length,
+      valor_min: cityIsCovered ? totals.min : undefined,
+      valor_max: cityIsCovered ? totals.max : undefined,
+    });
+    setStep(4);
+  }
 
   function resetCalculator() {
     setSelections({});
@@ -299,7 +312,7 @@ export default function Calculator() {
               <button
                 type="button"
                 disabled={!city}
-                onClick={() => setStep(4)}
+                onClick={finishStep3}
                 className="flex-1 rounded-full bg-aqua px-6 py-3.5 text-[15.5px] font-bold text-[#04302A] transition enabled:hover:-translate-y-0.5 enabled:hover:bg-[#2AEFCE] disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Ver estimativa
@@ -331,14 +344,13 @@ export default function Calculator() {
               </>
             )}
 
-            <a
+            <WhatsAppLink
               href={buildWhatsAppLink(whatsappMessage)}
-              target="_blank"
-              rel="noopener noreferrer"
+              origin="calculadora"
               className="mt-6 flex w-full items-center justify-center rounded-full bg-aqua px-6 py-4 text-[15.5px] font-bold text-[#04302A] shadow-[0_8px_22px_-8px_rgba(15,217,184,0.75)] transition hover:-translate-y-0.5 hover:bg-[#2AEFCE]"
             >
               Enviar pelo WhatsApp
-            </a>
+            </WhatsAppLink>
             <button
               type="button"
               onClick={resetCalculator}

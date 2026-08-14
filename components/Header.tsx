@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { buildWhatsAppLink } from "@/config/site";
 import { servicePages } from "@/content/services";
 import MobileMenu from "./MobileMenu";
+import WhatsAppLink from "./WhatsAppLink";
 
 const navLinks = [
   { label: "Preços", href: "/precos" },
@@ -18,11 +19,27 @@ export default function Header() {
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const mobileToggleRef = useRef<HTMLButtonElement>(null);
+  const wasMobileOpenRef = useRef(false);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setServicesOpen(false);
+      }
+      // O menu mobile agora é portalizado em document.body (fora do
+      // <header>), então checamos o clique contra ele pelo id em vez de um
+      // ref — não é descendente deste componente no DOM.
+      const menuEl = document.getElementById("mobile-menu");
+      const target = e.target as Node;
+      if (
+        mobileOpen &&
+        menuEl &&
+        !menuEl.contains(target) &&
+        mobileToggleRef.current &&
+        !mobileToggleRef.current.contains(target)
+      ) {
+        setMobileOpen(false);
       }
     }
     function handleEscape(e: KeyboardEvent) {
@@ -37,7 +54,7 @@ export default function Header() {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEscape);
     };
-  }, []);
+  }, [mobileOpen]);
 
   // Fecha o dropdown/menu mobile automaticamente ao trocar de página — o
   // Header vive no layout raiz e não remonta entre navegações client-side.
@@ -46,8 +63,18 @@ export default function Header() {
     setMobileOpen(false);
   }, [pathname]);
 
+  // Devolve o foco para o botão de hambúrguer ao fechar o menu (por Esc,
+  // clique fora, ou ao escolher um link) — navegação por teclado não pode
+  // perder o foco no vazio.
+  useEffect(() => {
+    if (wasMobileOpenRef.current && !mobileOpen) {
+      mobileToggleRef.current?.focus();
+    }
+    wasMobileOpenRef.current = mobileOpen;
+  }, [mobileOpen]);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-ink/90 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-ink/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
         <Link href="/" className="flex flex-col leading-none">
           <span className="inline-flex items-center font-display text-xl font-extrabold tracking-tight text-white">
@@ -114,22 +141,23 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <a
+          <WhatsAppLink
             href={buildWhatsAppLink()}
-            target="_blank"
-            rel="noopener noreferrer"
+            origin="header"
             className="inline-flex items-center gap-2 rounded-full bg-aqua px-5 py-3 text-sm font-bold text-[#04302A] shadow-[0_8px_22px_-8px_rgba(15,217,184,0.75)] transition hover:-translate-y-0.5 hover:bg-[#2AEFCE]"
           >
             Pedir orçamento
-          </a>
+          </WhatsAppLink>
 
           <button
+            ref={mobileToggleRef}
+            id="mobile-menu-toggle"
             type="button"
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
             aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
             onClick={() => setMobileOpen((o) => !o)}
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-white transition hover:bg-white/10 md:hidden"
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-white transition hover:bg-white/10 md:hidden"
           >
             {mobileOpen ? (
               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">

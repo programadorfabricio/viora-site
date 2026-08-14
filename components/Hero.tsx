@@ -1,5 +1,6 @@
 import { buildWhatsAppLink, hero } from "@/config/site";
 import BeforeAfterSlider from "./BeforeAfterSlider";
+import WhatsAppLink from "./WhatsAppLink";
 
 export default function Hero() {
   return (
@@ -41,14 +42,13 @@ export default function Hero() {
 
         {/* 5. Botões */}
         <div className="mt-2.5 flex flex-wrap gap-3 md:mt-7">
-          <a
+          <WhatsAppLink
             href={buildWhatsAppLink()}
-            target="_blank"
-            rel="noopener noreferrer"
+            origin="hero"
             className="inline-flex items-center gap-2 rounded-full bg-aqua px-6 py-3 text-[15.5px] font-bold text-[#04302A] shadow-[0_8px_22px_-8px_rgba(15,217,184,0.75)] transition hover:-translate-y-0.5 hover:bg-[#2AEFCE] md:py-3.5"
           >
             Pedir orçamento no WhatsApp
-          </a>
+          </WhatsAppLink>
           <a
             href="#calculadora"
             className="inline-flex items-center gap-2 rounded-full border-2 border-white/40 px-6 py-3 text-[15.5px] font-bold text-white transition hover:border-white hover:bg-white/10 md:py-3.5"

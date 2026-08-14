@@ -5,6 +5,7 @@ import { site, cities, services } from "@/config/site";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import StickyWhatsApp from "@/components/StickyWhatsApp";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -99,6 +100,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${bricolage.variable} ${publicSans.variable}`}>
       <body className="antialiased">
+        <GoogleAnalytics />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(businessJsonLd) }}

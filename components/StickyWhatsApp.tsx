@@ -1,4 +1,5 @@
 import { buildWhatsAppLink } from "@/config/site";
+import WhatsAppLink from "./WhatsAppLink";
 
 export default function StickyWhatsApp() {
   return (
@@ -8,14 +9,13 @@ export default function StickyWhatsApp() {
         <br />
         pelo WhatsApp
       </p>
-      <a
+      <WhatsAppLink
         href={buildWhatsAppLink()}
-        target="_blank"
-        rel="noopener noreferrer"
+        origin="barra_fixa"
         className="inline-flex shrink-0 items-center gap-2 rounded-full bg-aqua px-5 py-3 text-sm font-bold text-[#04302A] shadow-[0_8px_22px_-8px_rgba(15,217,184,0.75)]"
       >
         Pedir orçamento
-      </a>
+      </WhatsAppLink>
     </div>
   );
 }
