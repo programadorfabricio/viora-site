@@ -46,6 +46,15 @@ export const site = {
     region: "SP",
     country: "BR",
   },
+
+  // CNPJ e telefone de exibição no rodapé. Precisam ficar IDÊNTICOS ao que
+  // está no Perfil da Empresa do Google (mesmo nome, mesma cidade, mesmo
+  // telefone) — é o que garante consistência de NAP (Nome/Endereço/Telefone)
+  // entre o site e o Google, importante para SEO local. Não gere esse texto
+  // a partir do número do WhatsApp nem de nenhum outro campo: se algum
+  // desses dados mudar, atualize aqui E no Perfil da Empresa, os dois juntos.
+  cnpj: "68.597.288/0001-67",
+  phoneDisplay: "(19) 99105-2493",
 } as const;
 
 /**

@@ -75,9 +75,11 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-5 py-6 text-[13px] text-[#8B7FB0] sm:flex-row sm:justify-between">
-          <p>
-            © {new Date().getFullYear()} {site.name}
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-5 pb-24 pt-6 text-center text-[13px] text-[#8B7FB0] sm:flex-row sm:justify-between sm:text-left md:pb-6">
+          <p className="leading-relaxed">
+            © {new Date().getFullYear()} {site.name} · CNPJ {site.cnpj}
+            <br />
+            {site.address.locality}, {site.address.region} · {site.phoneDisplay}
           </p>
           <Link href="/politica-de-privacidade" className="font-semibold hover:text-white">
             Política de Privacidade
