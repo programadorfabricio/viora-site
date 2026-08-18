@@ -65,7 +65,7 @@ export const site = {
  * funciona normalmente sem GA4 configurado, só não há coleta de dados.
  */
 export const analytics = {
-  measurementId: "", // TODO: preencher com o Measurement ID do GA4
+  measurementId: "15459704805",
 };
 
 /**
